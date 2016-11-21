@@ -18,7 +18,7 @@ function createDeploymentThen(req, id, selfURL, deployment, callback) {
   function eventData(pgResult) {
     return {id: selfURL, action: 'create', etag: pgResult.rows[0].etag, deployment: deployment}
   }
-  pge.queryAndStoreEvent(req, pool, query, 'deployments', eventData, eventProducer, function(err, pgResult, pgEventResult) {
+  eventProducer.queryAndStoreEvent(req, query, 'deployments', eventData, function(err, pgResult, pgEventResult) {
     callback(err, pgResult.rows[0].etag)
   })
 }
@@ -57,7 +57,7 @@ function deleteDeploymentThen(req, id, callback) {
   function eventData(pgResult) {
     return {id: id, action: 'delete', etag: pgResult.rows[0].etag, deployment: pgResult.rows[0].data}
   }
-  pge.queryAndStoreEvent(req, pool, query, 'deployments', eventData, eventProducer, function(err, pgResult, pgEventResult) {
+  eventProducer.queryAndStoreEvent(req, query, 'deployments', eventData, function(err, pgResult, pgEventResult) {
     console.log('etag from db', pgResult.rows[0].etag)
     callback(err, pgResult.rows[0].data, pgResult.rows[0].etag)
   })
@@ -69,7 +69,7 @@ function updateDeploymentThen(req, id, deployment, patchedDeployment, etag, call
   function eventData(pgResult) {
     return {id: id, action: 'update', etag: pgResult.rows[0].etag, before: deployment, after: patchedDeployment}
   }
-  pge.queryAndStoreEvent(req, pool, query, 'deployments', eventData, eventProducer, function(err, pgResult, pgEventResult) {
+  eventProducer.queryAndStoreEvent(req, query, 'deployments', eventData, function(err, pgResult, pgEventResult) {
     callback(err, pgResult.rows[0].etag)
   })
 }
