@@ -1,0 +1,28 @@
+{
+  "name": "enrober-hub-node",
+  "version": "0.0.1",
+  "description": "Node implementation of enrober hub",
+  "main": "enrober-hub-db.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/30x/enrober-hub-node.git"
+  },
+  "author": "Martin Nally",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/30x/enrober-hub-node/issues"
+  },
+  "homepage": "https://github.com/30x/enrober-hub-node#readme",
+  "dependencies": {
+    "http-helper-functions": "0.0.73",
+    "permissions-helper-functions": "0.0.26",
+    "pg": "^6.1.0",
+    "pg-event-producer": "0.0.32"
+  }
+}

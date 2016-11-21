@@ -1,0 +1,69 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: enrober-hub-node
+  labels:
+    name: enrober-hub-node
+  namespace: apigee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: enrober-hub-node
+  template:
+    metadata:
+      labels:
+        component: enrober-hub-node
+        routable: "true"
+      annotations:
+        privateHosts: sso.k8s.dev
+        privatePaths: 3000:/enrober-hub-node
+    spec:
+      containers:
+      - name: enrober-hub-node
+        image: enrober-hub-node
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: PORT
+            value: "3000"
+          - name: PG_HOST
+            valueFrom:
+              secretKeyRef:
+                name: shipyard
+                key: pghost
+          - name: PG_USER
+            valueFrom:
+              secretKeyRef:
+                name: shipyard
+                key: pguser
+          - name: PG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: shipyard
+                key: pgpassword
+          - name: PG_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: shipyard
+                key: pgdatabase
+          - name: SHIPYARD_PRIVATE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: routing
+                key: private-api-key
+          - name: SPEEDUP
+            value: "10" 
+          - name: INTERNAL_SY_ROUTER_HOST
+            value: "kubernetes_host_ip"
+          - name: INTERNAL_SY_ROUTER_PORT
+            value: "30556"
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name            
+          - name: IPADDRESS
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP          
+        ports:
+          - containerPort: 3000
